@@ -34,7 +34,7 @@ It processes and analyzes news articles from BBC News to distinguish between fac
 To use this project, follow these steps:
 
 1. **Ensure Internet Connection**: Ensure a stable internet connection as the texts need to be scraped from the BBC website.
-2. **Run**: Execute the main.py file and wait for the processes to complete.
+2. **Run**: Run the main.py file and wait for the processes to complete.
 3. **Select News Article**: Choose one of the suggested news articles with text for evaluation.
 4. **View Results**: Results can be viewed in the console. Besides identifying the news as fake or real, additional information such as the number of words, most frequent words with their charts, the number of common features (or words) between the test and training data, and more will be displayed.
 
