@@ -5,40 +5,55 @@ class scraper:
     def bbc_scrap():
         ## requesting the website
         url = "https://www.bbc.com/news/world/europe"
-        
+
         response = requests.get(url)
         # print("the response code is : ",response)
-        
+
         ## parese the HTML document
         soup = BeautifulSoup(response.content , "html.parser")
-        
-        
-        # Extract all links within the specified div structure
-        divs = soup.find_all('div', class_="sc-9c1d76a2-2 fVwEgN")
-        
+
+
+        # Extract all links 
+        divs = soup.find_all('div')
+
         links = {}
         cnt=0
-        numbers=set()
         for div in divs:
             link_tags = div.find_all('a', href=True)
             if link_tags :
                 cnt+=1
-                numbers.add(cnt)
                 for tag in link_tags:
                     links[cnt] = tag['href']
-        # print("links found: ", links)
         
-        for cnt , link in links.items():
+        print("------------------------------------")
+        print("links found: \n", links)
+        print("------------------------------------")
+
+        # Extract 5 links with text containing fewer than 700 words 
+        # and identify any duplicate articles for removal.
+
+        counter=0
+        numbers=set()
+        check_duplicates=set()
+        for cnt , link in list(links.items())[40:]:
+            if counter >=5:
+                break
+            
             url = "https://www.bbc.com"+link
-            print(cnt ,")" ,"\n","url: " , url ,"\n")
             try:
                 response = requests.get(url)
                 soup = BeautifulSoup(response.content , "html.parser")
                 article = soup.find('article')
                 if article:
                     text = article.get_text(separator = "\n")
-                    print(text)
-                    print("--------------------------- \n \n")
+                    words_in = len(text.split())
+                    if words_in < 700 and words_in not in check_duplicates:
+                            check_duplicates.add(words_in)
+                            counter+=1
+                            numbers.add(cnt)
+                            print(cnt ,")" ,"\n","url: " , url ,"\n")
+                            print(text)
+                            print("--------------------------- \n \n")
             except:
                 continue
            
@@ -70,8 +85,4 @@ class scraper:
             text = False
             
             return text
-        
-            
-        
-        
         
